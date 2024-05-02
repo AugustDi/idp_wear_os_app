@@ -84,18 +84,20 @@ dependencies {
     // For Wear preview annotations
     implementation(libs.compose.ui.tooling)
 
-     //Use to implement support for Wear ProtoLayout Expressions
-    //implementation(libs.protolayout.expression)
-
-    // Use to implement support for Wear ProtoLayout
-    //implementation(libs.protolayout)
-
-    // Use to utilize components and layouts with Material design in your ProtoLayout
-    //implementation(libs.protolayout.material)
+//     //Use to implement support for Wear ProtoLayout Expressions
+//    implementation(libs.protolayout.expression)
+//
+//     //Use to implement support for Wear ProtoLayout
+//    implementation(libs.protolayout)
+//
+//     //Use to utilize components and layouts with Material design in your ProtoLayout
+//    implementation(libs.protolayout.material)
 
     implementation(libs.material.icons.extended)
 
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.core)
     implementation(libs.koin.compose)
+    implementation(libs.koin.androidx.workmanager)
+    implementation(libs.koin.core.coroutines)
 }
