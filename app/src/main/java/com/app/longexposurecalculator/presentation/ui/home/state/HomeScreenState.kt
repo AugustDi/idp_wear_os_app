@@ -8,13 +8,13 @@ import com.app.longexposurecalculator.presentation.ui.home.components.AppButtonD
 sealed class HomeScreenState(
     @StringRes
     val title: Int = R.string.exposure_calculator,
-
-    val isCalculateButtonEnabled: Boolean = false
+    val isCalculateButtonEnabled: Boolean = false,
+    var updatedTimeLocal: Long? = System.currentTimeMillis(),
 ) {
 
     data object Initial: HomeScreenState()
 
     data class ShowButtons(
-        val buttons: List<AppButtonDvo>
+        val buttons: List<AppButtonDvo>,
     ): HomeScreenState()
 }

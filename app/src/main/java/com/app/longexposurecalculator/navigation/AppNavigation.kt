@@ -7,6 +7,8 @@ import androidx.navigation.NavHostController
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import com.app.longexposurecalculator.presentation.ui.home.HomeScreen
+import com.app.longexposurecalculator.presentation.ui.sensor.SensorsDataScreen
+import com.app.longexposurecalculator.presentation.ui.wheel_select_picker.BaseWheelSelectPickerScreen
 
 @Composable
 fun AppNavigation(
@@ -19,7 +21,26 @@ fun AppNavigation(
         composable(
             route = Screen.HomeScreen.route
         ) {
-            HomeScreen()
+            HomeScreen(
+                navigateBack = {
+                    navController.popBackStack()
+                },
+                navigateTo = {
+                    navController.navigate(it)
+                }
+            )
+        }
+
+        composable(
+            route = Screen.SelectIsoScreen.route
+        ) {
+            BaseWheelSelectPickerScreen()
+        }
+
+        composable(
+            route = Screen.SensorsScreen.route
+        ) {
+            SensorsDataScreen()
         }
     }
 }

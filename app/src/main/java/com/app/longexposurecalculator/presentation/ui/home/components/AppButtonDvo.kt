@@ -5,23 +5,29 @@ import androidx.compose.ui.graphics.vector.ImageVector
 class AppButtonDvo private constructor(
     val title: String?,
     val icon: ImageVector?,
-    val value: Double?,
-    val type: ExposureParameter?
+    var value: Double?,
+    val type: ExposureParameter?,
 ) {
 
     data class Builder(
         var title: String? = null,
         var icon: ImageVector? = null,
         var value: Double? = null,
-        var type: ExposureParameter? = null
+        var type: ExposureParameter? = null,
     ) {
 
         fun setTitle(title: String) = apply { this.title = title }
         fun setIcon(icon: ImageVector) = apply { this.icon = icon }
-        fun setValue(value: Double) = apply { this.value = value}
+        fun setValue(value: Double) = apply { this.value = value }
         fun setType(type: ExposureParameter) = apply { this.type = type }
         fun build() = AppButtonDvo(title, icon, value, type)
     }
+
+    fun setNewValue(value: Double) {
+        this.value = value
+    }
+
+    override fun toString(): String = "title: $title\nicon: $icon\nvalue: $value\ntype: $type\n"
 }
 
 

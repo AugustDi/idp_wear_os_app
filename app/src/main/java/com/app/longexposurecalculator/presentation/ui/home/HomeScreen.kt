@@ -9,11 +9,13 @@ import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.rotary.RotaryScrollEvent
 import androidx.compose.ui.input.rotary.onRotaryScrollEvent
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
@@ -31,19 +33,34 @@ import androidx.wear.compose.material.VignettePosition
 import androidx.wear.compose.material.scrollAway
 import com.app.longexposurecalculator.presentation.ui.components.PrimaryButtonWithValue
 import com.app.longexposurecalculator.presentation.ui.extensions.topSpacerItem
+import com.app.longexposurecalculator.presentation.ui.home.event.HomeScreenEvent
 import com.app.longexposurecalculator.presentation.ui.home.state.HomeScreenState
+import com.app.longexposurecalculator.presentation.ui.home.state.NavigationState
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
     viewModel: HomeScreenViewModel = koinViewModel(),
+    navigateBack: () -> Unit,
+    navigateTo: (String) -> Unit
 ) {
 
     val screenState by viewModel.screenState.collectAsState()
+    val navigationState by viewModel.navigationState.collectAsState()
+
+    LaunchedEffect(navigationState) {
+        viewModel.resetNavigationState()
+        when(val state = navigationState) {
+            NavigationState.NavigateBack -> navigateBack()
+            is NavigationState.NavigateTo -> navigateTo(state.route)
+            NavigationState.None -> Unit
+        }
+    }
 
     HomeContent(
-        screenState = screenState
+        screenState = screenState,
+        event = viewModel::onEvent
     )
 }
 
@@ -51,6 +68,7 @@ fun HomeScreen(
 @Composable
 private fun HomeContent(
     screenState: HomeScreenState,
+    event: (HomeScreenEvent) -> Unit,
 ) {
     val scrollState = rememberScalingLazyListState()
     val focusRequester = rememberActiveFocusRequester()
@@ -103,10 +121,20 @@ private fun HomeContent(
                         PrimaryButtonWithValue(
                             modifier = Modifier.fillMaxWidth(),
                             text = button.title,
-                            value = if (button.value != null && button.value >= 0) button.value.toString() else null,
+                            value = if (button.value != null && button.value!! >= 0) button.value.toString() else null,
                             image = button.icon
                         ) {
-
+                            if (button.type == null) {
+                                event(
+                                    HomeScreenEvent.Calculate
+                                )
+                            } else {
+                                event(
+                                    HomeScreenEvent.OnValueChanged(
+                                        type = button.type
+                                    )
+                                )
+                            }
                         }
                     }
                 }

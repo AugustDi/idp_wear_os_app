@@ -17,6 +17,8 @@ sealed class Screen(
     val route get() = name + SCREEN_SUFFIX
 
     data object HomeScreen: Screen("home")
+    data object SelectIsoScreen: Screen("select_iso")
+    data object SensorsScreen: Screen("sensors")
 
     fun withArgs(vararg args: String): String {
         return buildString {
